@@ -14,12 +14,18 @@ using System.Xml;
 
 namespace MnbCurrencyReader
 {
-    public partial class Form1 : Form
+    public partial class TolPicker : Form
     {
         BindingList<RateData> Rates = new BindingList<RateData>();
-        public Form1()
+        public TolPicker()
         {
             InitializeComponent();
+            RefreshData();
+        }
+
+        private void RefreshData()
+        {
+            Rates.Clear();
             string xmlstring = Consume();
             LoadXml(xmlstring);
             dataGridView1.DataSource = Rates;
@@ -67,10 +73,15 @@ namespace MnbCurrencyReader
             GetExchangeRatesRequestBody request = new GetExchangeRatesRequestBody();
             request.currencyNames = "EUR";
             request.startDate = "2020-01-01";
-            request.endDate = "2020-06-30";
+            request.endDate = IgPicker.Value.ToString();  //"2020-06-30";
             var response = mnbService.GetExchangeRates(request);
             string result = response.GetExchangeRatesResult;
             return result;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            RefreshData();
         }
     }
     
